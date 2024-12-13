@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
           <nav className='nav-bar'>
              <Link to="/">Home</Link>
              <Link to="/profile">My Profile</Link>
-             <Link to="/exercise">Excercise</Link>
+             <Link to="/exercise">Exercise</Link>
              <Link to="/meals">Meals</Link>
           </nav>
           {isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}

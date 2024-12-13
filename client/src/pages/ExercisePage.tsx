@@ -55,7 +55,7 @@ export const ExercisePage = () => {
         <>
             <div className='centered'>
                 <div>
-                    <h1>My Exercises</h1>
+                    <h1>My Workouts</h1>
                 </div>
                 <section className='cardrow'>
                     <div className='card'>
