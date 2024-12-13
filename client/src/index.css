@@ -153,6 +153,12 @@ Dropdown.Item {
   padding: 5px;
   border: 5px solid black;
 }
+
+.pr {
+  color: black;
+  font-size: 15px;
+  margin-right: 70px;
+}
 /* Navbar Content */
 .nav {
   display: flex;
