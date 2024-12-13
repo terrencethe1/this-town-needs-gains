@@ -60,8 +60,9 @@ h4 {
 button {
   border-radius: 8px;
   border: 2px solid white;
-  padding: 0.6em 1.2em;
-  margin: 5% 7%;
+  width: 100px;
+  padding: 5px 5px;
+  margin: 5px 7%;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -227,15 +228,20 @@ tbody tr:nth-child(odd) {
   display: flex;
   justify-content: center;
   align-items: center;  
-
   width: 100%;
   background-color: rgb(194, 8, 8);
 }
-.top-header button{
+
+.header-btn {
+  display: flex;
+  flex-direction: column;
   position: absolute;
-  right: 10px;
-  
+  right: 30px;  
 }
+
+
+
+
 
 .logo {
  width: 350px;
