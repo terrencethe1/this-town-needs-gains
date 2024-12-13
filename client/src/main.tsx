@@ -4,12 +4,10 @@ import './index.css'
 
 import App from './App.tsx';
 import ErrorPage from './pages/ErrorPage.tsx';
-import MainPage from './pages/MainPage.tsx';
-import VolunteerPage from './pages/VolunteerPage.tsx';
-import VolunteerForm from './pages/VolunteerForm.tsx';
-import EditVolunteer from './pages/EditVolunteer.tsx';
-import EditWork from './pages/EditWork.tsx';
-
+import { HomePage } from './pages/HomePage.tsx';
+import { ProfilePage } from './pages/ProfilePage.tsx';
+import { ExercisePage } from './pages/ExercisePage.tsx';
+import { MealsPage } from './pages/MealsPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -19,27 +17,22 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <MainPage />
+        element: <HomePage />
       }, 
       {
-        path: '/show-volunteers',
-        element: <VolunteerPage />
+        path: 'profile',
+        element: <ProfilePage />
       },
       {
-        path: '/new-volunteer',
-        element: <VolunteerForm />
+        path: 'exercise',
+        element: <ExercisePage />
       },
       {
-        path: '/edit-volunteer',
-        element: <EditVolunteer />
-      },
-      {
-        path: '/edit-work',
-        element: <EditWork />
+        path: 'meals',
+        element: <MealsPage />
       }
-    ]
-  }
-]);
+  
+]}]);
 
 const rootElement = document.getElementById('root');
 if(rootElement) {
