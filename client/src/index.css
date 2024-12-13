@@ -239,6 +239,18 @@ tbody tr:nth-child(odd) {
   right: 30px;  
 }
 
+form div{
+  display: flex;  
+  justify-content: space-around;
+  flex-direction: row;
+  gap: 10px;
+}
+
+form div div{
+  display: flex;
+  flex-direction: column;  
+  gap: 10px;
+}
 
 
 

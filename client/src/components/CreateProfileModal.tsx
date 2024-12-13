@@ -12,8 +12,16 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
             <div className={styles['login-modal-content']}>
                 
                 <form action="submit" method="POST">
-                    <label htmlFor="name">Full Name:</label>
-                    <input type="text" name="name" id={styles["name"]} placeholder="Enter your fullname here" required/>
+                    <div className={styles["name-inputs"]}>
+                        <div>
+                            <label htmlFor="first-name">Fist Name:</label>
+                            <input type="text" name="name" id={styles["first-name"]} placeholder="Enter your fist name here" required/>
+                        </div>
+                        <div>
+                            <label htmlFor="last-name">Last Name:</label>
+                            <input type="text" name="name" id={styles["last-name"]} placeholder="Enter your last name here" required/>
+                        </div>
+                    </div>
 
                     <label htmlFor="email">Email Address:</label>
                     <input type="email" name="email" id="email" placeholder="Enter your email here" required/>
