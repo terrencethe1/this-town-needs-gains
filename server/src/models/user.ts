@@ -34,6 +34,10 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
     const saltRounds = 13;
     this.password = await bcrypt.hash(password, saltRounds);
   }
+
+  async checkPassword(testPassword: string) {
+    return await bcrypt.compare(testPassword, this.password);
+  }
 }
 
 export function UserFactory(sequelize: Sequelize): typeof User {
