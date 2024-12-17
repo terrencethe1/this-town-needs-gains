@@ -23,6 +23,9 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
                         </div>
                     </div>
 
+                    <label htmlFor="username">Username:</label>
+                    <input type="text" name="username" id="username" placeholder="Enter your username here" required/>
+
                     <label htmlFor="email">Email Address:</label>
                     <input type="email" name="email" id="email" placeholder="Enter your email here" required/>
 
@@ -42,6 +45,17 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
                         <option value="female">Famale</option>
                         <option value="other">Other</option>
                         <option value="prefer_not_to_say">Prefer not to say</option>                        
+                    </select>
+
+                    <label htmlFor="weight">Weight:</label>
+                    <input type="number" name="weight" id="weight" placeholder="Enter your weight here" min={1} />
+
+                    <label htmlFor="fitness-level">Fitness Level:</label>
+                    <select name="fitness-level" id="fitness-level" >
+                        <option value="">Select</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="expert">Expert</option>
                     </select>
 
                     <label htmlFor="fitness-goals">Fitness Goals</label>
