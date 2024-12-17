@@ -1,6 +1,15 @@
-import { DataTypes, Sequelize, Model, Optional } from 'sequelize';
+import { 
+  DataTypes, 
+  Sequelize, 
+  Model, 
+  type InferAttributes,
+  type InferCreationAttributes,
+  type CreationOptional,
+} from 'sequelize';
+
 import bcrypt from 'bcrypt';
 
+/*
 interface UserAttributes {
   id: number;
   fName: string;
@@ -17,7 +26,35 @@ interface UserAttributes {
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+*/
 
+export class User extends Model<
+  InferAttributes<User>,
+  InferCreationAttributes<User>
+> {
+  declare id: CreationOptional<number>;
+  declare fName: string;
+  declare lName: string;
+  declare username: string;
+  declare email: string;
+  declare password: string;
+  declare age: CreationOptional<number>;
+  declare gender: CreationOptional<string>;
+  declare weight: CreationOptional<number>;
+  declare fitnessLevel: CreationOptional<string>;
+  declare fitnessGoals: CreationOptional<string>;
+  declare exercisePreferences: CreationOptional<string>;
+
+  async setPassword(password: string): Promise<void> {
+    this.password = await bcrypt.hash(password, 13);
+  }
+
+async checkPassword(testPassword: string): Promise<boolean> {
+    return await bcrypt.compare(testPassword, this.password);
+  }
+}
+
+/*
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
   public fName!: string;
@@ -39,8 +76,9 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
     return await bcrypt.compare(testPassword, this.password);
   }
 }
+*/
 
-export function UserFactory(sequelize: Sequelize): typeof User {
+export function UserFactory(sequelize: Sequelize) {
   User.init(
     {
       id: {
