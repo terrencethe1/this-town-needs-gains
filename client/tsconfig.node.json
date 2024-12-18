@@ -1,4 +1,3 @@
-
 {
   "compilerOptions": {
     "composite": true,
@@ -8,5 +7,9 @@
     "allowSyntheticDefaultImports": true,
     "strict": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["vite.config.ts"]
 }
+
+
+
+//"src/**/*.ts", "src/interfaces/UserData.tsx"

@@ -8,6 +8,7 @@ import { HomePage } from './pages/HomePage.tsx';
 import { ProfilePage } from './pages/ProfilePage.tsx';
 import { ExercisePage } from './pages/ExercisePage.tsx';
 import { MealsPage } from './pages/MealsPage.tsx';
+import Login from './pages/Login.tsx';
 
 const router = createBrowserRouter([
   {
@@ -30,9 +31,14 @@ const router = createBrowserRouter([
       {
         path: '/meals',
         element: <MealsPage />
+      },
+      {
+        path: '/login',
+        element: <Login />
       }
-  
-]}]);
+    ]
+  }
+]);
 
 const rootElement = document.getElementById('root');
 if(rootElement) {
