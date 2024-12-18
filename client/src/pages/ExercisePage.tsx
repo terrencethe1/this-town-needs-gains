@@ -1,14 +1,46 @@
 import { useState, useEffect } from "react"
 import Dropdown from "react-bootstrap/Dropdown"
+import type Exercise from "../interfaces/Exercise"
+// const apiKey = import.meta.env.RAPID_NINJA_API_KEY
 // import { render } from "react-dom"
 
 export const ExercisePage = () => {
     // TODO: Create functions to:
     // Fetch exercise data and put it into workout objects to be displayed below
     const [exerciseSearch, setExerciseSearch] = useState('')
+    let [exercises, setExercises] = useState<Exercise[]>([])
 
-    const renderExerciseData = () => {
+    const fetchExerciseData = async () => {
+        try {
+            const url = `https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises?muscle=${exerciseSearch}`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-key': '15f2fdcd96mshe1b1810b30ba3b6p1c3c00jsn189315c1b851',
+                    'x-rapidapi-host': 'exercises-by-api-ninjas.p.rapidapi.com'
+                }
+            };
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    throw new Error('invalid API response, check the network tab');
+                }
+                const result = await response.json();
+                console.log('Data:', result);
+                return result
+            } catch (error) {
+                console.error(error);
+            }
+            // const response = await fetch(
+            //     `https://api.api-ninjas.com/v1/exercises?muscle=${exerciseSearch}`,
+            //     {
+            //         headers: {
+            //             'X-Api-Key': `${import.meta.env.NINJA_API_KEY}`
+            //         }
+            //     }
+            // )
         // Fetch and display data from exercise API when function is implemented
+    }
+    const renderExerciseData = async () => {
         {
             if (exerciseSearch === '') {
                 return (
@@ -17,23 +49,29 @@ export const ExercisePage = () => {
                     </>
                 );
             } else {
-                return (
-                    <>
-                        <div className='card'>
-                            <h2></h2>
-                            <div>
-                                <p>{exerciseSearch}</p>
-                                {/* This is where the exercise data will be displayed*/}
-                            </div>
+                return (exercises.map((exercise, index) => (
+                    <div className='card' key={index}>
+                        <div>
+                            <p>{exerciseSearch}</p>
+                            {/* This is where the exercise data will be displayed*/}
+                            <p>{exercise.name}</p>
+                            <p>{exercise.difficulty}</p>
+                            <p>{exercise.instructions}</p>
                         </div>
-                    </>
+                    </div>
                 )
+                ))
             }
         }
+
     }
 
     useEffect(() => {
+        console.log(exerciseSearch)
         renderExerciseData();
+        fetchExerciseData().then((data) => {
+            setExercises(data)
+        })
     }, [exerciseSearch])
     const searchDropdown = () => {
         // Basic dropdown menu structure from https://react-bootstrap.netlify.app/docs/components/dropdowns/
@@ -44,9 +82,23 @@ export const ExercisePage = () => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('Chest') }}>Chest</Dropdown.Item>
-                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('Back') }}>Back</Dropdown.Item>
-                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('Legs') }}>Legs</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('abdominals') }}>Abdominals</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('abductors') }}>Abductors</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('adductors') }}>Adductors</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('biceps') }}>Biceps</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('calves') }}>Calves</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('chest') }}>Chest</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('forearms') }}>Forearms</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('glutes') }}>Glutes</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('hamstrings') }}>Hamstrings</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('lats') }}>Lats</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('lower_back') }}>Lower Back</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('middle_back') }}>Middle Back</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('neck') }}>Neck</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('quadriceps') }}>Quads</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('traps') }}>Traps</Dropdown.Item>
+                    <Dropdown.Item className='dropdownitem' onClick={() => { setExerciseSearch('triceps') }}>Triceps</Dropdown.Item>
+
                 </Dropdown.Menu>
             </Dropdown>
         );
@@ -82,10 +134,24 @@ export const ExercisePage = () => {
                 </section>
                 <div>
                     <h1>Search exercises by muscle group</h1>
-                    <div className='centered'>
                         {searchDropdown()}
-                        {renderExerciseData()}
-
+                    <div className='exercisecardrow centered'>
+                        {exercises && exercises.length > 0
+                            ?
+                            exercises.map((exercise, index) => (
+                                <div className='wideCard' key={index}>
+                                    <div>
+                                        <p>{exerciseSearch}</p>
+                                        {/* This is where the exercise data will be displayed*/}
+                                        <p>{exercise.name}</p>
+                                        <p>{exercise.difficulty}</p>
+                                        <p>{exercise.instructions}</p>
+                                    </div>
+                                </div>
+                            )
+                            )
+                            : <h2>No exercises searched yet!</h2>
+                        }
                     </div>
                 </div>
             </div>
