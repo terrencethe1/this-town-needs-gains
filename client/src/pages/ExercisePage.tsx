@@ -10,6 +10,28 @@ export const ExercisePage = () => {
     const [exerciseSearch, setExerciseSearch] = useState('')
     let [exercises, setExercises] = useState<Exercise[]>([])
 
+    const saveExercise = async (exercise: string) => {
+        console.log(exercise, typeof exercise)
+        try {
+            const response = await fetch('/api/exercises', {
+                method: 'POST',
+                    headers: {
+                        'Content-Type': 'text; charset=utf-8',
+                    },
+                body: `"exerciseName": ${exercise}`
+            }
+        )
+        const data = response.json()
+        if (!response.ok) {
+            throw new Error('invalid API response, check network tab!');
+        }
+        console.log(data);
+        return data
+         } catch (error: any) {
+
+        }
+    }
+
     const fetchExerciseData = async () => {
         try {
             const url = `https://exercises-by-api-ninjas.p.rapidapi.com/v1/exercises?muscle=${exerciseSearch}`;
@@ -20,55 +42,54 @@ export const ExercisePage = () => {
                     'x-rapidapi-host': 'exercises-by-api-ninjas.p.rapidapi.com'
                 }
             };
-                const response = await fetch(url, options);
-                if (!response.ok) {
-                    throw new Error('invalid API response, check the network tab');
-                }
-                const result = await response.json();
-                console.log('Data:', result);
-                return result
-            } catch (error) {
-                console.error(error);
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error('invalid API response, check the network tab');
             }
-            // const response = await fetch(
-            //     `https://api.api-ninjas.com/v1/exercises?muscle=${exerciseSearch}`,
-            //     {
-            //         headers: {
-            //             'X-Api-Key': `${import.meta.env.NINJA_API_KEY}`
-            //         }
-            //     }
-            // )
+            const result = await response.json();
+            console.log('Data:', result);
+            return result
+        } catch (error) {
+            console.error(error);
+        }
+        // const response = await fetch(
+        //     `https://api.api-ninjas.com/v1/exercises?muscle=${exerciseSearch}`,
+        //     {
+        //         headers: {
+        //             'X-Api-Key': `${import.meta.env.NINJA_API_KEY}`
+        //         }
+        //     }
+        // )
         // Fetch and display data from exercise API when function is implemented
     }
-    const renderExerciseData = async () => {
-        {
-            if (exerciseSearch === '') {
-                return (
-                    <>
-                        <h2>Search for exercises by muscle group!</h2>
-                    </>
-                );
-            } else {
-                return (exercises.map((exercise, index) => (
-                    <div className='card' key={index}>
-                        <div>
-                            <p>{exerciseSearch}</p>
-                            {/* This is where the exercise data will be displayed*/}
-                            <p>{exercise.name}</p>
-                            <p>{exercise.difficulty}</p>
-                            <p>{exercise.instructions}</p>
-                        </div>
-                    </div>
-                )
-                ))
-            }
-        }
+    // const renderExerciseData = async () => {
+    //     {
+    //         if (exerciseSearch === '') {
+    //             return (
+    //                 <>
+    //                     <h2>Search for exercises by muscle group!</h2>
+    //                 </>
+    //             );
+    //         } else {
+    //             return (exercises.map((exercise, index) => (
+    //                 <div className='card' key={index}>
+    //                     <div>
+    //                         <p>{exerciseSearch}</p>
+    //                         {/* This is where the exercise data will be displayed*/}
+    //                         <p>{exercise.name}</p>
+    //                         <p>{exercise.difficulty}</p>
+    //                         <p>{exercise.instructions}</p>
+    //                     </div>
+    //                 </div>
+    //             )
+    //             ))
+    //         }
+    //     }
 
-    }
+    // }
 
     useEffect(() => {
         console.log(exerciseSearch)
-        renderExerciseData();
         fetchExerciseData().then((data) => {
             setExercises(data)
         })
@@ -134,7 +155,7 @@ export const ExercisePage = () => {
                 </section>
                 <div>
                     <h1>Search exercises by muscle group</h1>
-                        {searchDropdown()}
+                    {searchDropdown()}
                     <div className='exercisecardrow centered'>
                         {exercises && exercises.length > 0
                             ?
@@ -146,6 +167,9 @@ export const ExercisePage = () => {
                                         <p>{exercise.name}</p>
                                         <p>{exercise.difficulty}</p>
                                         <p>{exercise.instructions}</p>
+                                        <button onClick={() => {
+                                            saveExercise(exercise.name)
+                                        }}>Save Exercise</button>
                                     </div>
                                 </div>
                             )
