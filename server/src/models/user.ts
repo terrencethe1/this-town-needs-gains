@@ -119,7 +119,7 @@ export function UserFactory(sequelize: Sequelize) {
         type: DataTypes.STRING,
       },
       weight: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
       },
       fitnessLevel: {
         type: DataTypes.STRING,
