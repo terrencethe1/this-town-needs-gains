@@ -72,8 +72,8 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
                     
                     <div className={styles["name-inputs"]}>
                         <div>
-                            <label htmlFor="first-name">Fist Name:</label>
-                            <input type="text" name="firstName" id="firstName" placeholder="Enter your fist name here" onChange={handleChange} required/>
+<label htmlFor="first-name">First Name:</label>
+<input type="text" name="firstName" id="firstName" placeholder="Enter your first name here" onChange={handleChange} required/>
                         </div>
                         <div>
                             <label htmlFor="last-name">Last Name:</label>
