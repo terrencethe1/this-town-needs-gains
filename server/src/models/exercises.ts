@@ -1,28 +1,44 @@
-import { DataTypes, Sequelize, Model, Optional } from 'sequelize';
+import { 
+  DataTypes,
+  Model,
+  Sequelize,
+  type CreationOptional,
+  type ForeignKey,
+  type InferAttributes,
+  type InferCreationAttributes,
+} from 'sequelize';
 
+import { User } from './user';
+
+/*
 interface ExerciseAttributes {
   id: number;
   exerciseName: string;
-  exerciseGroup: 'cardio' | 'olympic_weightlifting' | 'plyometrics' | 'powerlifting' | 'strength' | 'stretching' | 'strongman';
-  difficulty: 'beginner' | 'intermediate' | 'expert';
-  muscleGroup: 'abdominals' | 'abductors' | 'adductors' | 'biceps' | 'calves' | 'chest' | 'forearms' | 'glutes' | 'hamstrings' | 'lats' | 'lower_back' | 'middle_back' | 'neck' | 'quadriceps' | 'traps' | 'triceps';
+  exerciseGroup: string;
+  difficulty: string;
+  muscleGroup: string;
   equipment: string;
   instructions: string;
 }
 
 interface ExerciseCreationAttributes extends Optional<ExerciseAttributes, 'id'> {}
+*/
 
-export class Exercise extends Model<ExerciseAttributes, ExerciseCreationAttributes> implements ExerciseAttributes {
-  public id!: number;
-  public exerciseName!: string;
-  public exerciseGroup!: 'cardio' | 'olympic_weightlifting' | 'plyometrics' | 'powerlifting' | 'strength' | 'stretching' | 'strongman';
-  public difficulty!: 'beginner' | 'intermediate' | 'expert';
-  public muscleGroup!: 'abdominals' | 'abductors' | 'adductors' | 'biceps' | 'calves' | 'chest' | 'forearms' | 'glutes' | 'hamstrings' | 'lats' | 'lower_back' | 'middle_back' | 'neck' | 'quadriceps' | 'traps' | 'triceps';
-  public equipment!: string;
-  public instructions!: string;
+export class Exercise extends Model<
+InferAttributes<Exercise>, 
+InferCreationAttributes<Exercise>
+> {
+  declare id: CreationOptional<number>;
+  declare exerciseName: string;
+  declare exerciseGroup: CreationOptional<string>;
+  declare difficulty: CreationOptional<string>;
+  declare muscleGroup: CreationOptional<string>;
+  declare equipment: CreationOptional<string>;
+  declare instructions: CreationOptional<string>;
+  declare userId: ForeignKey<User['id']>;
 }
 
-export function ExerciseFactory(sequelize: Sequelize): typeof Exercise {
+export function ExerciseFactory(sequelize: Sequelize) {
   Exercise.init(
     {
       id: {
@@ -36,23 +52,18 @@ export function ExerciseFactory(sequelize: Sequelize): typeof Exercise {
       },
       exerciseGroup: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
       difficulty: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
       muscleGroup: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
       equipment: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
       instructions: {
         type: DataTypes.STRING,
-        allowNull: false,
       }
     },
     {

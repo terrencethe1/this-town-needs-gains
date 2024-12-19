@@ -7,15 +7,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const login = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-
+const { username, password } = req.body;
+  console.log(username);
   const user = await User.findOne({
-    where: { username },
+    where: { username }
   });
+
   if (!user) {
     return res.status(401).json({ message: 'Authentication failed' });
   }
-
+  
   const passwordIsValid = await bcrypt.compare(password, user.password);
   if (!passwordIsValid) {
     return res.status(401).json({ message: 'Authentication failed' });

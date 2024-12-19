@@ -8,10 +8,14 @@ const User = UserFactory(sequelize);
 const Meal = MealFactory(sequelize);
 const Exercise = ExerciseFactory(sequelize);
 
-User.hasMany(Meal, { foreignKey: 'assignedMealId'});
-Meal.belongsTo(User, { foreignKey: 'assignedUserId', as: 'assignedUser'});
+User.hasMany(Meal, /*{ foreignKey: 'assignedMealId'}*/{
+    onDelete: 'CASCADE',
+  });
+Meal.belongsTo(User/*, { foreignKey: 'assignedUserId', as: 'assignedUser'}*/);
 
-User.hasMany(Exercise, { foreignKey: 'assignedExerciseId'});
-Exercise.belongsTo(User, { foreignKey: 'assignedUserId', as: 'assignedUser'});
+User.hasMany(Exercise,/* { foreignKey: 'assignedExerciseId'}*/{
+    onDelete: 'CASCADE',
+  });
+Exercise.belongsTo(User/*, { foreignKey: 'assignedUserId', as: 'assignedUser'}*/);
 
-export { User, Meal, Exercise };
+export { sequelize, User, Meal, Exercise };

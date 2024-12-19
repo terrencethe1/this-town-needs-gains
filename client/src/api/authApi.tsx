@@ -12,8 +12,9 @@ const login = async (userInfo: UserLogin) => {
 
     const data = await response.json();
 
+    // Throw error if response status is not OK (200-299)
     if (!response.ok) {
-      throw new Error('User information not retrieved, check network tab!');
+      throw new Error("Could not send user login to server"); // Throw a detailed error message    
     }
 
     return data;

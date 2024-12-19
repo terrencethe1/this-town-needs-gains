@@ -1,5 +1,16 @@
-import { DataTypes, Sequelize, Model, Optional } from 'sequelize';
+import { 
+  DataTypes,
+  Model,
+  Sequelize,
+  type CreationOptional,
+  type ForeignKey,
+  type InferAttributes,
+  type InferCreationAttributes,
+} from 'sequelize';
 
+import type { User } from './user';
+
+/*
 interface MealAttributes {
   id: number;
   mealName: string;
@@ -11,14 +22,19 @@ interface MealAttributes {
 }
 
 interface MealCreationAttributes extends Optional<MealAttributes, 'id'> {}
+*/
 
-export class Meal extends Model<MealAttributes, MealCreationAttributes> implements MealAttributes {
-  public id!: number;
-  public mealName!: string;
-  public ingredients!: string;
+export class Meal extends Model<
+InferAttributes<Meal>, 
+InferCreationAttributes<Meal>
+> {
+  declare id: CreationOptional<number>;
+  declare mealName: string;
+  declare ingredients: CreationOptional<string>;
+  declare userId: ForeignKey<User['id']>;
 }
 
-export function MealFactory(sequelize: Sequelize): typeof Meal {
+export function MealFactory(sequelize: Sequelize) {
   Meal.init(
     {
       id: {
@@ -32,19 +48,6 @@ export function MealFactory(sequelize: Sequelize): typeof Meal {
       },
       ingredients: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
-      calories: {
-        type: DataTypes.INTEGER,
-      },
-      carbs: {
-        type: DataTypes.INTEGER,
-      },
-      fat: {
-        type: DataTypes.INTEGER,
-      },
-      protein: {
-        type: DataTypes.INTEGER,
       }
     },
     {

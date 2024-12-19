@@ -1,13 +1,13 @@
 import { 
-  DataTypes, 
-  Sequelize, 
-  Model, 
+  DataTypes,
+  Model,
+  Sequelize,
+  type CreationOptional,
   type InferAttributes,
   type InferCreationAttributes,
-  type CreationOptional,
 } from 'sequelize';
 
-import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt';
 
 /*
 interface UserAttributes {
@@ -45,13 +45,15 @@ export class User extends Model<
   declare fitnessGoals: CreationOptional<string>;
   declare exercisePreferences: CreationOptional<string>;
 
+  /*
   async setPassword(password: string): Promise<void> {
     this.password = await bcrypt.hash(password, 13);
   }
 
-async checkPassword(testPassword: string): Promise<boolean> {
+  async checkPassword(testPassword: string): Promise<boolean> {
     return await bcrypt.compare(testPassword, this.password);
   }
+  */
 }
 
 /*
@@ -108,9 +110,6 @@ export function UserFactory(sequelize: Sequelize) {
       password: {
         type: DataTypes.STRING(64),
         allowNull: false,
-        validate: {
-          is: /^[0-9a-f]{64}$/i,
-        },
       },
       age: {
         type: DataTypes.INTEGER,
@@ -134,6 +133,7 @@ export function UserFactory(sequelize: Sequelize) {
     {
       tableName: 'user',
       sequelize,
+      /*
       hooks: {
         beforeCreate: async (user: User) => {
           await user.setPassword(user.password);
@@ -141,7 +141,7 @@ export function UserFactory(sequelize: Sequelize) {
         beforeUpdate: async (user: User) => {
           await user.setPassword(user.password);
         },
-      },
+      }, */
     }
   );
 

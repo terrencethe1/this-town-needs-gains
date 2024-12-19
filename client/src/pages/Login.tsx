@@ -1,3 +1,4 @@
+/*
 import { useState, type FormEvent, type ChangeEvent } from 'react';
 
 import Auth from '../utils/auth';
@@ -65,3 +66,4 @@ const Login = () => {
 };
 
 export default Login;
+*/

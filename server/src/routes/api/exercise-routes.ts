@@ -1,5 +1,4 @@
-import express from 'express';
-import type { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { Exercise } from '../../models/exercises.js';
 
 const router = express.Router();

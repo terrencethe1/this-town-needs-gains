@@ -18,10 +18,10 @@ router.get('/', async (_req: Request, res: Response) => {
 
 // POST /meals - Create a new meal
 router.post('/', async (req: Request, res: Response) => {
-  const { mealName, ingredients, calories, carbs, fat, protein } = req.body;
+  const { mealName, ingredients } = req.body;
   try {
     const newMeal = await Meal.create({
-      mealName, ingredients, calories, carbs, fat, protein
+      mealName, ingredients
     });
     res.status(201).json(newMeal);
   } catch (error: any) {

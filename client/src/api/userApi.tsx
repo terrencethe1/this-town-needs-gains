@@ -1,8 +1,9 @@
+
 import Auth from '../utils/auth';
 
-const retrieveUsers = async () => {
+const retrieveUser = async (username: string | null) => {
   try {
-    const response = await fetch('/api/users', {
+    const response = await fetch(`/api/user/${username}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${Auth.getToken()}`,
@@ -21,4 +22,4 @@ const retrieveUsers = async () => {
   }
 };
 
-export { retrieveUsers };
+export { retrieveUser };
