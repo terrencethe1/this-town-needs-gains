@@ -1,40 +1,13 @@
-import { 
-  DataTypes, 
-  Sequelize, 
-  Model, 
-  type InferAttributes,
-  type InferCreationAttributes,
-  type CreationOptional,
-} from 'sequelize';
-
+import { DataTypes, Sequelize, Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
 import bcrypt from 'bcrypt';
-
-/*
-interface UserAttributes {
-  id: number;
-  fName: string;
-  lName: string;
-  username: string;
-  email: string;
-  password: string;
-  age?: number;
-  gender?: string;
-  weight?: number;
-  fitnessLevel?: 'beginner' | 'intermediate' | 'expert';
-  fitnessGoals?: string;
-  exercisePreferences?: string;
-}
-
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
-*/
 
 export class User extends Model<
   InferAttributes<User>,
   InferCreationAttributes<User>
 > {
   declare id: CreationOptional<number>;
-  declare fName: string;
-  declare lName: string;
+  declare firstName: string;
+  declare lastName: string;
   declare username: string;
   declare email: string;
   declare password: string;
@@ -49,34 +22,10 @@ export class User extends Model<
     this.password = await bcrypt.hash(password, 13);
   }
 
-async checkPassword(testPassword: string): Promise<boolean> {
+  async checkPassword(testPassword: string): Promise<boolean> {
     return await bcrypt.compare(testPassword, this.password);
   }
 }
-
-/*
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number;
-  public fName!: string;
-  public lName!: string;
-  public username!: string;
-  public email!: string;
-  public password!: string;
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-
-  // Hash the password before saving the user
-  public async setPassword(password: string) {
-    const saltRounds = 13;
-    this.password = await bcrypt.hash(password, saltRounds);
-  }
-
-  async checkPassword(testPassword: string) {
-    return await bcrypt.compare(testPassword, this.password);
-  }
-}
-*/
 
 export function UserFactory(sequelize: Sequelize) {
   User.init(
@@ -86,10 +35,10 @@ export function UserFactory(sequelize: Sequelize) {
         autoIncrement: true,
         primaryKey: true,
       },
-      fName: {
+      firstName: {
         type: DataTypes.STRING,
       },
-      lName: {
+      lastName: {
         type: DataTypes.STRING,
       },
       username: {
@@ -104,25 +53,30 @@ export function UserFactory(sequelize: Sequelize) {
         validate: {
           isEmail: true,
         },
+        set(value: string) {
+          this.setDataValue('email', value.toLowerCase());
+        }
       },
       password: {
         type: DataTypes.STRING(64),
         allowNull: false,
         validate: {
-          is: /^[0-9a-f]{64}$/i,
+          len: [60, 60],
         },
       },
       age: {
         type: DataTypes.INTEGER,
       },
       gender: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('male', 'female', 'other', 'prefer not to say'),
+        allowNull: true,
       },
       weight: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
       },
       fitnessLevel: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('beginner', 'intermediate', 'advanced'),
+        allowNull: true,
       },
       fitnessGoals: {
         type: DataTypes.TEXT,
@@ -139,7 +93,9 @@ export function UserFactory(sequelize: Sequelize) {
           await user.setPassword(user.password);
         },
         beforeUpdate: async (user: User) => {
+          if (user.changed('password')) {
           await user.setPassword(user.password);
+          }
         },
       },
     }

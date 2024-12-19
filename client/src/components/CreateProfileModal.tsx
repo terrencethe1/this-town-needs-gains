@@ -39,10 +39,10 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
         }
         setError('');
         try {
-            const response = await fetch('/api/users', {
+            const response = await fetch('http://localhost:3003/api/auth/register', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',                    
                 },
                 body: JSON.stringify(formData)
             });       
@@ -53,11 +53,15 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
 
             const data = await response.json();
             const { token } = data;
-            localStorage.setItem('token', token);
+
+            if (token) {
+                localStorage.setItem('token', token);               
+            }
             onClose();
+
         } catch (error) {
             console.error('There was a problem with your fetch operation:', error);
-        }
+            setError('There was a problem with your fetch operation'); }
             console.log(formData);
     }
 
@@ -100,7 +104,7 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
                     <select id="gender" name="gender" onChange={handleChange} >
                         <option value="">Select</option>
                         <option value="male">Male</option>
-                        <option value="female">Famale</option>
+                        <option value="female">Female</option>
                         <option value="other">Other</option>
                         <option value="prefer_not_to_say">Prefer not to say</option>                        
                     </select>

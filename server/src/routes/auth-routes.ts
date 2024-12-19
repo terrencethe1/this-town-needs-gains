@@ -1,35 +1,13 @@
-import { Router, type Request, type Response } from 'express';
-import { User } from '../models/user.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import express from 'express';
+import { registerUser } from '../Controller/userController.js';
+// import { registerUser, loginUser } from '../Controller/userController';
 
-import dotenv from 'dotenv';
-dotenv.config();
+const router = express.Router();
 
-export const login = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+// Registration Route
+router.post('/register', registerUser);
 
-  const user = await User.findOne({
-    where: { username },
-  });
-  if (!user) {
-    return res.status(401).json({ message: 'Authentication failed' });
-  }
-
-  const passwordIsValid = await bcrypt.compare(password, user.password);
-  if (!passwordIsValid) {
-    return res.status(401).json({ message: 'Authentication failed' });
-  }
-
-  const secretKey = process.env.JWT_SECRET_KEY || '';
-
-  const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
-  return res.json({ token });
-};
-
-const router = Router();
-
-// POST /login - Login a user
-router.post('/login', login);
+// Login Route
+// router.post('/login', loginUser);
 
 export default router;
