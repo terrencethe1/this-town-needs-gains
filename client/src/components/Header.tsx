@@ -3,7 +3,7 @@ import TTNGLOGO from '../assets/images/TTNG-LOGO.png';
 import { Link } from 'react-router-dom';
 import { LoginModal } from './LoginModal';
 import { CreateProfileModal } from './CreateProfileModal';
-
+import AuthService from '../utils/auth';
 
 
 export const Header: React.FC = () => {
@@ -26,13 +26,17 @@ export const Header: React.FC = () => {
     setIsSignupModalOpen(false);
   };
 
+  const logOut = () => {
+    AuthService.logout()
+  }
+
 
     return (
         <div className='header'>
           <div className='top-header'> 
           <a href="/"><img className='logo' src={TTNGLOGO}></img></a>
           <div className='header-btn'>
-            <button className='login-btn' onClick={openLoginModal}>Login</button>
+            {AuthService.loggedIn() ? <button className='logout-btn' onClick={logOut}>Logout</button> : <button className='login-btn' onClick={openLoginModal}>Login</button>}
             <button className='signup-btn' onClick={openSignupModal}>Sign Up</button>
           </div>
 
@@ -43,8 +47,8 @@ export const Header: React.FC = () => {
              <Link to="/exercise">Exercise</Link>
              <Link to="/meals">Meals</Link>
           </nav>
-          {isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}
-          {isSignupModalOpen && <CreateProfileModal onClose={closeSignupModal} />}
+          {isLoginModalOpen && <LoginModal onClose={closeLoginModal} onLoginSuccess={closeLoginModal} />}
+          {isSignupModalOpen && <CreateProfileModal onClose={closeSignupModal} onSuccessfulRegister={openLoginModal} />}
 
         </div>
     );

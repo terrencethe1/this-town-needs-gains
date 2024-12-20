@@ -6,10 +6,11 @@ import { useNavigate } from 'react-router-dom';
 
 interface CreateProfileModalProps {
     onClose: () => void;
+    onSuccessfulRegister: () => void;
 }
 
 
-export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose}) => {
+export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, onSuccessfulRegister}) => {
 
     const [userData, setUserData] = useState({
         fName: '',
@@ -17,6 +18,7 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
         username: '',
         email: '',
         password: '',
+        confirmPassword: '',
         age: 0,
         gender: '',
         weight: 0,
@@ -24,15 +26,23 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
         fitnessGoals: '',
         exercisePreferences: '',
       });
+
+      const [error, setError] = useState('');
     
       // Handle changes in the input fields
        const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLFormElement | HTMLSelectElement >) => {
         setUserData({ ...userData, [e.target.name]: e.target.value });
       }; 
       console.log(userData);
+
       // Handle form submission
       const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        if (userData.password !== userData.confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+        setError('');
         console.log(userData);
         try {
           // Send the user registration data to the server
@@ -55,9 +65,12 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
             throw new Error('Could not send data to server.')
           }
           
+          onSuccessfulRegister();
+            onClose();
 
-        } catch (err) {
-          console.error('Failed to add new user', err);  // Log any errors that occur
+        } catch (error) {
+          console.error('Failed to add new user', error);
+          setError('There was a problem with your fetch operation');  // Log any errors that occur
         }
       };
 
@@ -173,6 +186,8 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
                         <option value="endurance">Endurance</option>
                         <option value="other">Other</option>
                     </select>
+
+                    {error && <p className={styles["error-message"]}>{error}</p>}
 
                     <div className={styles['form-btn']}>
                         <button className={styles["submit-btn"]} type="submit">Submit</button>

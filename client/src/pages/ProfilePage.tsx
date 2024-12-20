@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { UserData } from '../interfaces/UserData';
 
 export const ProfilePage = () => {
+    
     console.log(AuthService.getProfile());
     const username = AuthService.getProfile().username;
     console.log(username);

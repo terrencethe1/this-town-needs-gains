@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface LoginModalProps {
     onClose: () => void;
+    onLoginSuccess: () => void;
 }
 
 export const LoginModal: React.FC<LoginModalProps> = ({onClose}) => {
@@ -54,8 +55,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({onClose}) => {
             const navigate = useNavigate();
             navigate('/profile');
 
-        } catch (err) {
-            console.error('Failed to log in', err);  // Log any errors that occur
+        } catch (error) {
+        
+            console.error('Failed to log in', error);
+              // Log any errors that occur
         }
     };
 
