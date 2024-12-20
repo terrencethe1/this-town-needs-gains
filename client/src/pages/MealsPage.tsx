@@ -2,6 +2,21 @@ export const MealsPage = () => {
     return (
         <>
             <div className='centered'>
+                    <h1>Nutrition Goals</h1>
+                <div className='shortcard'>
+                    <p>
+                        Calories:
+                    </p>
+                    <p>
+                        Protein:
+                    </p>
+                    <p>
+                        Fats:
+                    </p>
+                    <p>
+                        Carbs:
+                    </p>
+                </div>
                 <div>
                     <h1>My Meals</h1>
                 </div>
@@ -28,6 +43,7 @@ export const MealsPage = () => {
                         </div>
                     </div>
                 </section>
+
                 <div>
                     <h1>Suggested Recipes</h1>
                     <div className='centered'>

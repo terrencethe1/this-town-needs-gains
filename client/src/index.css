@@ -50,7 +50,7 @@ h1 {
 }
 
 h3 {
-  color: #4B6858;
+  color: #000000;
 }
 
 h4 {
@@ -100,9 +100,6 @@ tbody tr:nth-child(odd) {
   background-color: #333333;
 }
 
-Dropdown.Item {
-
-}
 /* Classes for components */
 .centered, .dropdowndiv {
   display: flex;
@@ -130,10 +127,40 @@ Dropdown.Item {
   min-height: 400px
 }
 
+.shortcard {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-content: space-evenly;
+  justify-content: flex-start;
+  border: 10px solid black;
+  background-color: rgb(212, 106, 19);
+  width: 200px;
+  height: fit-content;
+  min-height: 200px
+}
+.wideCard {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-content: space-evenly;
+    justify-content: flex-start;
+    border: 10px solid black;
+    background-color: rgb(212, 106, 19);
+    width: 100%;
+    height: fit-content;
+    min-height: 400px
+}
+
+
 .cardrow {
   display: flex;
   flex-direction: row;
+}
 
+.exercisecardrow {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .header {

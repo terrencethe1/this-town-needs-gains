@@ -1,7 +1,7 @@
 import express from 'express';
 import type { Request, Response } from 'express';
 import { User } from '../../models/index.js';
-// import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 // import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 // import { pool } from '../../models/db.js';  
@@ -12,7 +12,7 @@ dotenv.config();
 const router = express.Router();
 // const secretKey = process.env.JWT_SECRET_KEY || '';
 
-// GET /users - Get all users
+// GET /user - Get all users
 router.get('/', async (_req: Request, res: Response) => {
   try {
     const users = await User.findAll({
@@ -24,7 +24,7 @@ router.get('/', async (_req: Request, res: Response) => {
   }
 });
 
-// GET /users/:id - Get a user by id
+// GET /user/:id - Get a user by id
 router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -41,37 +41,19 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// POST /users - Create a new user
-// app.post('/api/users', async (req: Request, res: Response) => {
-//   const { fName, lName, username, email, password, age, gender, weight, fitnessLevel, fitnessGoals, exercisePreferences } = req.body; 
+// POST /user - Create a new user
+router.post('/', async (req: Request, res: Response) => {
+  try {
+    const newUser = req.body;
+    newUser.password = await bcrypt.hash(req.body.password, 13);
+    const userData = await User.create(newUser);
+    res.status(200).json(userData);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
-//   if (!fName || !lName || !username || !email || !password || !age || !gender || !weight || !fitnessLevel || !fitnessGoals || !exercisePreferences) {
-//     return res.status(400).json({ message: 'Please fill out all fields' });
-//   }
-
-//   try {
-//     const userExists = await pool.query('SELECT * FROM user WHERE username = $1', [username]);
-//     if (userExists.rows.length > 0) {
-//       return res.status(400).json({ message: 'User already exists' });
-//     }
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     const result = await pool.query(
-//       'INSERT INTO user (fName, lName, username, email, password, age, gender, weight, fitnessLevel, fitnessGoals, exercisePreferences) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *',
-//       [fName, lName, username, email, hashedPassword, age, gender, weight, fitnessLevel, fitnessGoals, exercisePreferences]
-//     ); 
-//     const token = jwt.sign({ id: result.rows[0].id, email: result.rows[0].email }, secretKey, { expiresIn: '1h' });
-    
-//     res.status(201).json({ token });
-//   } catch (error: any) {
-//     res.status(500).json({ message: error.message });
-//     }
-//     return res.status(500).json({ message: 'Unexpected error' });
-//   });
-
-
-
-// PUT /users/:id - Update a user by id
+// PUT /user/:id - Update a user by id
 router.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const { username, password } = req.body;
@@ -90,7 +72,7 @@ router.put('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// DELETE /users/:id - Delete a user by id
+// DELETE /user/:id - Delete a user by id
 router.delete('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
