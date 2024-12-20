@@ -66,7 +66,7 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
         <div className={styles['login-modal']}>
             <div className={styles['login-modal-content']}>
                 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} data-dismiss="modal">
                     <div className={styles["name-inputs"]}>
                         <div>
                             <label htmlFor="fName">First Name:</label>
