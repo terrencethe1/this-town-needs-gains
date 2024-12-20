@@ -56,7 +56,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({onClose}) => {
             navigate('/profile');
 
         } catch (error) {
-        
             console.error('Failed to log in', error);
               // Log any errors that occur
         }
@@ -94,7 +93,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({onClose}) => {
                     </div>
 
                 </form>
-
+            
                 
             </div>
         </div>

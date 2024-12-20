@@ -27,7 +27,7 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
         exercisePreferences: '',
       });
 
-      const [error, setError] = useState('');
+      // const [error, setError] = useState('');
     
       // Handle changes in the input fields
        const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLFormElement | HTMLSelectElement >) => {
@@ -38,11 +38,11 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
       // Handle form submission
       const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        if (userData.password !== userData.confirmPassword) {
+        /* if (userData.password !== userData.confirmPassword) {
             setError('Passwords do not match');
-            return;
-        }
-        setError('');
+            return; 
+        } */
+        // setError('');
         console.log(userData);
         try {
           // Send the user registration data to the server
@@ -56,6 +56,9 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
             })
           });
 
+          onSuccessfulRegister();
+          onClose();
+
           const data = response.json();
           console.log(data);
           const navigate = useNavigate();
@@ -64,13 +67,11 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
           if (!response.ok) {
             throw new Error('Could not send data to server.')
           }
-          
-          onSuccessfulRegister();
-            onClose();
+        
 
         } catch (error) {
           console.error('Failed to add new user', error);
-          setError('There was a problem with your fetch operation');  // Log any errors that occur
+          // setError('There was a problem with your fetch operation');  // Log any errors that occur
         }
       };
 
@@ -135,14 +136,14 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
                     onChange={handleChange} 
                     required/>
 
-                    <label htmlFor="confirm-pass">Confirm Password:</label>
+                    <label htmlFor="confirmPassword">Confirm Password:</label>
                     <input 
                     type="password" 
-                    name="confirm-pass" 
-                    id="confirm-pass" 
-                    placeholder="Confirm your password here" 
-                    value={userData.password} 
-                    onChange={handleChange} 
+                    name="confirmPassword" 
+                    id="confirmPassword" 
+                    placeholder="Confirm your password here"
+                    onChange={handleChange}
+                    value={userData.confirmPassword}
                     required/>
 
                     <label htmlFor="age">Age:</label>
@@ -158,7 +159,7 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
                     />
 
                     <label htmlFor="gender">Gender:</label>
-                    <select id="gender" name="gender" >
+                    <select id="gender" name="gender" value={userData.gender} onChange={handleChange}>
                         <option value="">Select</option>
                         <option value="male">Male</option>
                         <option value="female">Famale</option>
@@ -177,7 +178,7 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
                     ></textarea>
                     
                     <label htmlFor="exercisePreferences">Exercise Preferences:</label>
-                    <select name="exercisePreferences" id="exercice-preferences">
+                    <select name="exercisePreferences" id="exercice-preferences" value={userData.exercisePreferences} onChange={handleChange}>
                         <option value="">Select</option>
                         <option value="cardio">Cardio</option>
                         <option value="strength">Strength</option>
@@ -187,7 +188,7 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
                         <option value="other">Other</option>
                     </select>
 
-                    {error && <p className={styles["error-message"]}>{error}</p>}
+
 
                     <div className={styles['form-btn']}>
                         <button className={styles["submit-btn"]} type="submit">Submit</button>

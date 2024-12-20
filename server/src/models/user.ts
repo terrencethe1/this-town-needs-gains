@@ -38,6 +38,7 @@ export class User extends Model<
   declare username: string;
   declare email: string;
   declare password: string;
+  declare confirmPassword: CreationOptional<string>;
   declare age: CreationOptional<number>;
   declare gender: CreationOptional<string>;
   declare weight: CreationOptional<number>;
@@ -102,7 +103,7 @@ export function UserFactory(sequelize: Sequelize) {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // unique: true,
         validate: {
           isEmail: true,
         },
@@ -110,6 +111,9 @@ export function UserFactory(sequelize: Sequelize) {
       password: {
         type: DataTypes.STRING(64),
         allowNull: false,
+      },
+      confirmPassword: {
+        type: DataTypes.STRING,
       },
       age: {
         type: DataTypes.INTEGER,
