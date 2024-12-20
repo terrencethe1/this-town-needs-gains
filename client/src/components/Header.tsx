@@ -43,8 +43,8 @@ export const Header: React.FC = () => {
              <Link to="/exercise">Exercise</Link>
              <Link to="/meals">Meals</Link>
           </nav>
-          {isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}
-          {isSignupModalOpen && <CreateProfileModal onClose={closeSignupModal} />}
+          {isLoginModalOpen && <LoginModal onClose={closeLoginModal} onLoginSuccess={closeLoginModal} />}
+          {isSignupModalOpen && <CreateProfileModal onClose={closeSignupModal} onSuccessfulRegister={openLoginModal} />}
 
         </div>
     );

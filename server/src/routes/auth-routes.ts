@@ -1,6 +1,6 @@
 import express from 'express';
-import { registerUser } from '../Controller/userController.js';
-// import { registerUser, loginUser } from '../Controller/userController';
+// import { registerUser } from '../Controller/userController.js';
+import { registerUser, loginUser } from '../Controller/userController.js';
 
 const router = express.Router();
 
@@ -8,6 +8,6 @@ const router = express.Router();
 router.post('/register', registerUser);
 
 // Login Route
-// router.post('/login', loginUser);
+router.post('/login', loginUser);
 
 export default router;

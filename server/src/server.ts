@@ -21,7 +21,7 @@ app.use('/api/auth', userRoutes);
 // Catch-all route for frontend (if you’re using a client-side framework like React)
 app.use(routes);
 
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 3001;
 
 // app.listen(PORT, () => {
 //   console.log(`Server running on http://localhost:${PORT}`);

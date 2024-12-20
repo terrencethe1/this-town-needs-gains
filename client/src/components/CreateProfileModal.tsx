@@ -3,9 +3,10 @@ import styles from './LoginModal.module.css';
 
 interface CreateProfileModalProps {
     onClose: () => void;
+    onSuccessfulRegister: () => void;
 }
 
-export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose}) => {
+export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, onSuccessfulRegister}) => {
 
     const [formData, setFormData] = React.useState({
         firstName: '',
@@ -39,7 +40,7 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
         }
         setError('');
         try {
-            const response = await fetch('http://localhost:3003/api/auth/register', {
+            const response = await fetch('http://localhost:3001/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',                    
@@ -57,6 +58,9 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose})
             if (token) {
                 localStorage.setItem('token', token);               
             }
+
+
+            onSuccessfulRegister();
             onClose();
 
         } catch (error) {
