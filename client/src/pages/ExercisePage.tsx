@@ -16,18 +16,19 @@ export const ExercisePage = () => {
             const response = await fetch('/api/exercises', {
                 method: 'POST',
                     headers: {
-                        'Content-Type': 'text; charset=utf-8',
+                        'Content-Type': 'application/json',
                     },
-                body: `"exerciseName": ${exercise}`
-            }
-        )
-        const data = response.json()
+                body: JSON.stringify({exerciseName: exercise}),
+        });
+        
         if (!response.ok) {
-            throw new Error('invalid API response, check network tab!');
+            throw new Error(`invalid API response, check network tab! Status: ${response.status}`);
         }
+        const data = await response.json();
         console.log(data);
         return data
          } catch (error: any) {
+            console.error('There is an error saving exercise', error);
 
         }
     }
