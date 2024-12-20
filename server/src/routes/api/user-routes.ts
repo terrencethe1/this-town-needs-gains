@@ -2,8 +2,15 @@ import express from 'express';
 import type { Request, Response } from 'express';
 import { User } from '../../models/index.js';
 import bcrypt from 'bcrypt';
+// import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+// import { pool } from '../../models/db.js';  
 
+dotenv.config();
+
+// const app = express();
 const router = express.Router();
+// const secretKey = process.env.JWT_SECRET_KEY || '';
 
 // GET /user - Get all users
 router.get('/', async (_req: Request, res: Response) => {
