@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import Dropdown from "react-bootstrap/Dropdown"
-import type Exercise from "../interfaces/Exercise"
+import { Exercise } from "../interfaces/ExerciseMeals"
 // const apiKey = import.meta.env.RAPID_NINJA_API_KEY
 // import { render } from "react-dom"
 
@@ -128,32 +128,32 @@ export const ExercisePage = () => {
     return (
         <>
             <div className='centered'>
-                <div>
-                    <h1>My Workouts</h1>
-                </div>
-                <section className='cardrow'>
+                {/* <div>
+                    <h1>My Exercises</h1>
+                </div> */}
+                {/* <section className='cardrow'>
                     <div className='card'>
                         <h2>Push</h2>
                         <div>
                             <p>Chest, shoulders, and triceps</p>
-                            {/* This is where the exercise data will be displayed*/}
+                            
                         </div>
                     </div>
                     <div className='card'>
                         <h2>Pull</h2>
                         <div>
                             <p>Back and biceps</p>
-                            {/* This is where the exercise data will be displayed*/}
+                            
                         </div>
                     </div>
                     <div className='card'>
                         <h2>Legs</h2>
                         <div>
                             <p>Quads, hammies and glutes</p>
-                            {/* This is where the exercise data will be displayed*/}
+                            
                         </div>
                     </div>
-                </section>
+                </section> */}
                 <div>
                     <h1>Search exercises by muscle group</h1>
                     {searchDropdown()}
@@ -169,7 +169,12 @@ export const ExercisePage = () => {
                                         <p>{exercise.difficulty}</p>
                                         <p>{exercise.instructions}</p>
                                         <button onClick={() => {
-                                            saveExercise(exercise.name)
+                                            saveExercise(exercise.name);
+                                            return (
+                                            <>
+                                                <h1>Exercise Saved!</h1>
+                                            </>
+                                            )
                                         }}>Save Exercise</button>
                                     </div>
                                 </div>

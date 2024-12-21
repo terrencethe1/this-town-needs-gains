@@ -137,7 +137,7 @@ tbody tr:nth-child(odd) {
   background-color: rgb(212, 106, 19);
   width: 200px;
   height: fit-content;
-  min-height: 200px
+  min-height: 400px
 }
 .wideCard {
     text-align: center;
