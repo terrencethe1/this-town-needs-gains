@@ -2,17 +2,25 @@ import express from 'express';
 import type { Request, Response } from 'express';
 import { User } from '../../models/index.js';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
+
 
 const router = express.Router();
+
 
 // GET /user - Get all users
 router.get('/', async (_req: Request, res: Response) => {
   try {
+    console.log(' res object is ', res);
     const users = await User.findAll({
       attributes: { exclude: ['password'] }
     });
     res.json(users);
   } catch (error: any) {
+    console.log('error is ', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -37,11 +45,13 @@ router.get('/:id', async (req: Request, res: Response) => {
 // POST /user - Create a new user
 router.post('/', async (req: Request, res: Response) => {
   try {
+    console.log('res object in POST /user route:', res);
     const newUser = req.body;
     newUser.password = await bcrypt.hash(req.body.password, 13);
     const userData = await User.create(newUser);
     res.status(200).json(userData);
   } catch (error: any) {
+    console.log('Error in POST /user route:', error);
     res.status(400).json({ message: error.message });
   }
 });

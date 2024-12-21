@@ -1,5 +1,4 @@
-import sequelize from '../config/connection.js';
-
+import { sequelize } from './db.js';
 import { UserFactory } from './user.js';
 import { MealFactory } from './meals.js';
 import { ExerciseFactory } from './exercises.js';

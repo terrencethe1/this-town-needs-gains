@@ -15,7 +15,7 @@ export const authenticateToken = (
   if (authHeader) {
     const token = authHeader.split(' ')[1];
 
-    const secretKey = process.env.JWT_SECRET_KEY || '';
+    const secretKey = process.env.JWT_SECRET_KEY || 'your-secret-key';
 
     jwt.verify(token, secretKey, (err, user) => {
       if (err) {
@@ -26,6 +26,6 @@ export const authenticateToken = (
       return next();
     });
   } else {
-    res.sendStatus(401); // Unauthorized
+    res.sendStatus(407); // Unauthorized
   }
 };
