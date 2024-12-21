@@ -29,11 +29,12 @@ export const registerUser = async (req: Request, res: Response) => {
         // Check if the user already exists
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
+
             return res.status(400).json({ message: 'User already exists.' });
         }
 
         // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        
 
         // Create new user
         const newUser = await User.create({
@@ -41,7 +42,7 @@ export const registerUser = async (req: Request, res: Response) => {
             lastName,
             username,
             email,
-            password: hashedPassword,
+            password,
             age,
             gender,
             weight,
@@ -49,6 +50,8 @@ export const registerUser = async (req: Request, res: Response) => {
             fitnessGoals,
             exercisePreferences,
         });
+
+        console.log('New user created:', newUser.username);
 
         // Generate JWT
         const token = jwt.sign({ id: newUser.id }, JWT_SECRET, { expiresIn: '1h' });
@@ -62,29 +65,47 @@ export const registerUser = async (req: Request, res: Response) => {
 }
 
 
-    export const loginUser = async (req: Request, res: Response) => {
-        const { username, password } = req.body;
+export const loginUser = async (req: Request, res: Response) => {
+    const { username, password } = req.body;
 
-        try {
-            const user = await User.findOne({ where: { username } });
+    try {
+        if (!username || !password) {
 
-            if (!user) {
-                return res.status(404).json({ message: 'User not found.' });
-            }
-
-            const isPasswordValid = await bcrypt.compare(password, user.password);
-
-            if (!isPasswordValid) {
-                return res.status(401).json({ message: 'Invalid credentials.' });
-            }
-
-            const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
-
-            return res.json({token, user: { id: user.id, username: user.username }});
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal server error.' });
+            console.log('Required fields are missing:');
+            return res.status(400).json({ message: 'Required fields are missing.' });
         }
-    
-        return;
+
+        const user = await User.findOne({ where: { username } });
+        
+
+        if (!user) {
+            console.log('User not found:');
+            
+            return res.status(404).json({ message: 'User not found.' });
+        }
+        console.log('User found:', user.username);
+
+        console.log('Password provided: ', password); 
+        console.log('Password in DB: ', user.password);
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        console.log('Password valid:', isPasswordValid);
+
+        if (!isPasswordValid) {
+            console.log('Wrong password');
+            return res.status(401).json({ message: 'Invalid credentials.' });
+        }
+
+        const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
+
+        console.log('User logged in:', user.username);
+
+        return res.json({token, user: { id: user.id, username: user.username }});
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({ message: 'Internal server error.' });
     }
+    
+    return;
+}

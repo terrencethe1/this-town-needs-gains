@@ -18,14 +18,13 @@ app.use(express.urlencoded({ extended: true }));
 // Define the API routes for user authentication
 app.use('/api/auth', userRoutes);
 
+app.use('/api/user', userRoutes);
+
 // Catch-all route for frontend (if you’re using a client-side framework like React)
 app.use(routes);
 
 const PORT = process.env.PORT || 3001;
 
-// app.listen(PORT, () => {
-//   console.log(`Server running on http://localhost:${PORT}`);
-// });
 
 // Database connection and server start
 sequelize.authenticate()
@@ -43,7 +42,16 @@ sequelize.authenticate()
   });
 
 // Global error handler (optional)
-app.use((err: any, _req: express.Request, res: express.Response) => {
-  console.error(err);
-  res.status(500).json({ error: 'Something went wrong!' });
+app.use((err: any, _req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+  console.error('An error occurred:', err);
+
+  console.log('res is not a proper response object', res);
+
+  if(res && typeof res.status === 'function') {
+
+    res.status(500).json({ error: 'Something went wrong!' });
+  } else {
+    next(err);
+  }
 });
