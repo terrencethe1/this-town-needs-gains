@@ -1,16 +1,18 @@
 import React from 'react';
 import styles from './LoginModal.module.css';
 
+
 interface LoginModalProps {
     onClose: () => void;
-    onLoginSuccess: () => void;
+    onLoginSuccess: (username: string) => void;
 }
 
-export const LoginModal: React.FC<LoginModalProps> = ({onClose}) => {
+export const LoginModal: React.FC<LoginModalProps> = ({onClose, onLoginSuccess}) => {
     // Login code here
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [error, setError] = React.useState('');
+    
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.name === 'username') {
@@ -27,26 +29,26 @@ export const LoginModal: React.FC<LoginModalProps> = ({onClose}) => {
             const response = await fetch('http://localhost:3001/api/auth/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',                    
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    username,
-                    password
-                })
+                body: JSON.stringify({ username, password }),
             });
+            
+            console.log('API Response:', response);
 
-            if (!response.ok) {
-           const data = await response.json();
+            if (response.ok) {
+                const data = await response.json();
 
-           localStorage.setItem('token', data.token);
-              onClose();
-            }
-            else {
+                localStorage.setItem('token', data.token);
+              
+                onLoginSuccess(data.user?.username || '');
+                onClose();
+            } else {
                 const errorData = await response.json();
-                setError(errorData.error);                
+                setError(errorData.message || 'Invalid username or password');              
             }
         } catch (error) {
-            setError('An error occurred');
+            setError('An error occurred while logging in');
             console.error('An error occurred:', error);
         }
     };
@@ -63,7 +65,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({onClose}) => {
                     <input type="text" name="username" id="username" placeholder="Enter your username here" onChange={handleChange} required/>
 
                     <label htmlFor="password">Password:</label>
-                    <input type="password" name="password" id="password" placeholder="Enter your password here" required/>
+                    <input type="password" name="password" id="password" placeholder="Enter your password here" onChange={handleChange} required/>
 
                     {error && <p className={styles['error-message']}>{error}</p>}
                     <div className={styles['form-btn']}>

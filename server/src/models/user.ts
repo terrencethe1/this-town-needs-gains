@@ -19,7 +19,8 @@ export class User extends Model<
   declare exercisePreferences: CreationOptional<string>;
 
   async setPassword(password: string): Promise<void> {
-    this.password = await bcrypt.hash(password, 13);
+    this.password = await bcrypt.hash(password, 10);
+
   }
 
   async checkPassword(testPassword: string): Promise<boolean> {
@@ -58,11 +59,14 @@ export function UserFactory(sequelize: Sequelize) {
         }
       },
       password: {
-        type: DataTypes.STRING(64),
+        type: DataTypes.STRING(60),
         allowNull: false,
         validate: {
-          len: [60, 60],
-        },
+          len: {
+            args: [8, 60],
+            msg: 'Password must be between 8 and 60 characters.',
+          }
+        }
       },
       age: {
         type: DataTypes.INTEGER,
@@ -90,10 +94,12 @@ export function UserFactory(sequelize: Sequelize) {
       sequelize,
       hooks: {
         beforeCreate: async (user: User) => {
+          if  ( !user.password.startsWith('$2b$') ) {
           await user.setPassword(user.password);
+          }
         },
         beforeUpdate: async (user: User) => {
-          if (user.changed('password')) {
+          if (user.changed('password') && !user.password.startsWith('$2b$')) {
           await user.setPassword(user.password);
           }
         },
