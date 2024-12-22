@@ -3,13 +3,14 @@ import TTNGLOGO from '../assets/images/TTNG-LOGO.png';
 import { Link } from 'react-router-dom';
 import { LoginModal } from './LoginModal';
 import { CreateProfileModal } from './CreateProfileModal';
+import { useUser } from '../context/UserContext';
 
 
 
-export const Header: React.FC = () => {
+export const Header: React.FC= () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const {currentUser, setCurrentUser} = useUser();
 
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
@@ -28,7 +29,8 @@ export const Header: React.FC = () => {
   };
 
   const handleLoginSuccess = (username: string) => {
-    setCurrentUser(username);
+    setCurrentUser({ username });
+    console.log('Current User:', currentUser);
     closeLoginModal();
   };
 
@@ -43,7 +45,7 @@ export const Header: React.FC = () => {
           <div className='header-btn'>
            {currentUser ? (
             <>
-              <span className='welcome'>Welcome, {currentUser}</span>
+              <span className='welcome'>Welcome, {currentUser.username}</span>
               <button className='logout-btn' onClick={handleLogout}>Logout</button>
             </>
             ) : (

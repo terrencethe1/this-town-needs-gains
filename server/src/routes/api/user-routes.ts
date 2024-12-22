@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 import { User } from '../../models/index.js';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import { authenticateToken } from '../../middleware/auth.js';
 
 
 dotenv.config();
@@ -26,11 +27,12 @@ router.get('/', async (_req: Request, res: Response) => {
 });
 
 // GET /user/:id - Get a user by id
-router.get('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
+router.get('/:username', authenticateToken, async (req: Request, res: Response) => {
+  const { username } = req.params;
   try {
-    const user = await User.findByPk(id, {
-      attributes: { exclude: ['password'] }
+    const user = await User.findOne({
+        where: { username },
+        attributes: { exclude: ['password'] }
     });
     if (user) {
       res.json(user);

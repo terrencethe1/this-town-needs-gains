@@ -9,6 +9,7 @@ import { ProfilePage } from './pages/ProfilePage.tsx';
 import { ExercisePage } from './pages/ExercisePage.tsx';
 import { MealsPage } from './pages/MealsPage.tsx';
 import Login from './pages/Login.tsx';
+import { UserProvider } from './context/UserContext.tsx';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,8 @@ const router = createBrowserRouter([
 const rootElement = document.getElementById('root');
 if(rootElement) {
   ReactDOM.createRoot(rootElement).render(
-    <RouterProvider router={router} />
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
   );
 }
