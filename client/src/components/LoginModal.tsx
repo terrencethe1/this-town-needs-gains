@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './LoginModal.module.css';
+import { useUser } from '../context/UserContext';
 
 
 interface LoginModalProps {
@@ -12,6 +13,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({onClose, onLoginSuccess})
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [error, setError] = React.useState('');
+    const { setCurrentUser } = useUser();
     
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,10 +36,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({onClose, onLoginSuccess})
                 body: JSON.stringify({ username, password }),
             });
             
-            console.log('API Response:', response);
+          
 
             if (response.ok) {
                 const data = await response.json();
+                setCurrentUser(data.user);
+                console.log('Data:', data);
 
                 localStorage.setItem('token', data.token);
               
