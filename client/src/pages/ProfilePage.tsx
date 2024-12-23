@@ -19,7 +19,7 @@ export const ProfilePage: React.FC = () => {
         if (token && currentUser) {
             const fetchUserData = async () => {
                 try {
-                    const response = await fetch(`http://localhost:3001/api/user/${currentUser.username}`, {
+                    const response = await fetch(`/api/user/${currentUser.username}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         },
