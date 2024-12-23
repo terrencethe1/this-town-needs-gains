@@ -18,10 +18,11 @@ router.get('/', async (_req: Request, res: Response) => {
 
 // POST /exercises - Create a new exercise
 router.post('/', async (req: Request, res: Response) => {
-  const { exerciseName, exerciseGroup, difficulty, muscleGroup, equipment, instructions } = req.body;
+  
+  const { exerciseName } = req.body;
   try {
     const newExercise = await Exercise.create({
-      exerciseName, exerciseGroup, difficulty, muscleGroup, equipment, instructions
+     exerciseName
     });
     res.status(201).json(newExercise);
   } catch (error: any) {

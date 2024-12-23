@@ -3,12 +3,14 @@ import { DataTypes, Sequelize, Model, Optional } from 'sequelize';
 interface MealAttributes {
   id: number;
   mealName: string;
-  ingredients: string;
+  ingredients?: string;
   calories?: number;
   carbs?: number;
   fat?: number;
   protein?: number;
 }
+
+// Change by Zach LaCore: Added optional declaration to ingredients property in MealAttributes interface
 
 interface MealCreationAttributes extends Optional<MealAttributes, 'id'> {}
 
