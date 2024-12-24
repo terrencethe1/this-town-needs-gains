@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { SavedExercise } from "../interfaces/ExerciseMeals";
-import { useUser } from "../context/UserContext";
+// import { useUser } from "../context/UserContext";
 
 export const ProfilePage: React.FC = () => {
 
@@ -29,7 +29,7 @@ export const ProfilePage: React.FC = () => {
     }, [])
 // import { useUser } from "../context/UserContext";
 // import  React, { useState, useEffect } from 'react';
-
+  /*
 interface UserData {
     username: string;
     fitnessLevel: string | null;
@@ -81,20 +81,20 @@ interface UserData {
     if (error) {
         return <div>{error}</div>;
     }
-           
+    */
  
     return (
         <>
             <div className='centered'>
                 <div>
-                    <h1>{userData?.username} Profile</h1>
+                    <h1>{/*userData?.username*/} Profile</h1>
                 </div>
                 <section className='cardrow'>
                     <div className='card'>
                         <h2>My info</h2>
                         <div>
-                            <p>Fitness Level: {userData?.fitnessLevel} </p>
-                            <p>Weight: {userData?.weight}</p>
+                            <p>Fitness Level: {/*userData?.fitnessLevel*/} </p>
+                            <p>Weight: {/*userData?.weight*/}</p>
                             <p>Goals: {}</p>
                         </div>
                         {/* This is where the exercise data will be displayed*/}

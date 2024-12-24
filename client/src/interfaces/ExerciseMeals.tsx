@@ -44,7 +44,7 @@ interface Meal {
             name: string;
             unit: string
         }
-    ]}
+    ]};
     title: string
 }
 

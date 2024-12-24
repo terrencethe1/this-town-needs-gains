@@ -57,7 +57,7 @@ export const MealsPage = () => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                body: JSON.stringify({mealName: meal, ingredients: "", calories: meal.nutrition.nutrients[0], protein: meal.nutrition.nutrients[1], carbs: meal.nutrition.nutrients[2], fat: 0}),
+                body: JSON.stringify({mealName: meal.title, ingredients: "", calories: meal.nutrition.nutrients[0], protein: meal.nutrition.nutrients[1], carbs: meal.nutrition.nutrients[2], fat: 0}),
         });
         
         if (!response.ok) {
