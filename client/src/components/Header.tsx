@@ -3,18 +3,18 @@ import TTNGLOGO from '../assets/images/TTNG-LOGO.png';
 import { Link } from 'react-router-dom';
 import { LoginModal } from './LoginModal';
 import { CreateProfileModal } from './CreateProfileModal';
-import { useUser } from '../context/UserContext';
+import AuthService from '../utils/auth';
+import { useNavigate } from 'react-router-dom';
 
-
-
-export const Header: React.FC= () => {
+export const Header: React.FC = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
-  const {currentUser, setCurrentUser} = useUser();
 
-  const openLoginModal = () => {
-    setIsLoginModalOpen(true);
-  };
+
+  let navigate = useNavigate();
+  const handleLogin = () => {
+    navigate('/login')
+  }
 
   const closeLoginModal = () => {
     setIsLoginModalOpen(false);
@@ -28,32 +28,18 @@ export const Header: React.FC= () => {
     setIsSignupModalOpen(false);
   };
 
-  const handleLoginSuccess = (username: string) => {
-    setCurrentUser({ username });
-    console.log('Current User:', currentUser);
-    closeLoginModal();
-  };
+  const logOut = () => {
+    AuthService.logout()
+  }
 
-  const handleLogout = () => {
-    setCurrentUser(null);
-  };
 
     return (
         <div className='header'>
           <div className='top-header'> 
           <a href="/"><img className='logo' src={TTNGLOGO}></img></a>
           <div className='header-btn'>
-           {currentUser ? (
-            <>
-              <span className='welcome'>Welcome, {currentUser.username}</span>
-              <button className='logout-btn' onClick={handleLogout}>Logout</button>
-            </>
-            ) : (
-            <>
-              <button className='login-btn' onClick={openLoginModal}>Login</button>
-              <button className='signup-btn' onClick={openSignupModal}>Sign Up</button>
-            </>
-          )}
+            {AuthService.loggedIn() ? <button className='logout-btn' onClick={logOut}>Logout</button> : <button className='login-btn' onClick={handleLogin}>Login</button>}
+            <button className='signup-btn' onClick={openSignupModal}>Sign Up</button>
           </div>
 
           </div> 
@@ -63,8 +49,8 @@ export const Header: React.FC= () => {
              <Link to="/exercise">Exercise</Link>
              <Link to="/meals">Meals</Link>
           </nav>
-          {isLoginModalOpen && <LoginModal onClose={closeLoginModal} onLoginSuccess={handleLoginSuccess} />}
-          {isSignupModalOpen && <CreateProfileModal onClose={closeSignupModal} onSuccessfulRegister={openLoginModal} />}
+          {isLoginModalOpen && <LoginModal onClose={closeLoginModal} onLoginSuccess={closeLoginModal} />}
+          {isSignupModalOpen && <CreateProfileModal onClose={closeSignupModal} onSuccessfulRegister={closeSignupModal} />}
 
         </div>
     );

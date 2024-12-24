@@ -33,17 +33,17 @@ class AuthService {
   }
 
   getToken(): string {
-    const loggedUser = localStorage.getItem('id_token') || '';
+    const loggedUser = localStorage.getItem('token') || '';
     return loggedUser;
   }
 
   login(idToken: string) {
-    localStorage.setItem('id_token', idToken);
+    localStorage.setItem('token', idToken);
     window.location.assign('/');
   }
 
   logout() {
-    localStorage.removeItem('id_token');
+    localStorage.removeItem('token');
     window.location.assign('/');
   }
 }

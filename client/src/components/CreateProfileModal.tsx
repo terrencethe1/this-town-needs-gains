@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import styles from './LoginModal.module.css';
+import { useNavigate } from 'react-router-dom';
+import AuthService from '../utils/auth';
 
 interface CreateProfileModalProps {
     onClose: () => void;
     onSuccessfulRegister: () => void;
 }
 
-export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, onSuccessfulRegister}) => {
+export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, /* onSuccessfulRegister */}) => {
 
     const [formData, setFormData] = React.useState({
         firstName: '',
@@ -17,18 +19,21 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
         confirmPassword: '',
         age: 0,
         gender: '',
-        weigth: 0,
+        weight: 0,
         fitnessLevel: '',
         fitnessGoals: '',
         exercisePreferences: ''
     });
 
     const [error, setError] = useState('');
+    let navigate = useNavigate();
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
         setFormData({
-            ...formData,
-            [e.target.id]: e.target.value
+          ...formData,
+          [name]: value,
         });
     }
 
@@ -53,20 +58,19 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
             }
 
             const data = await response.json();
-            const { token } = data;
-
-            if (token) {
-                localStorage.setItem('token', token);               
-            }
 
 
-            onSuccessfulRegister();
+            AuthService.login(data.token);
             onClose();
+            navigate('/profile');
+            
 
         } catch (error) {
             console.error('There was a problem with your fetch operation:', error);
             setError('There was a problem with your fetch operation'); }
-            console.log(formData);
+
+
+
     }
 
 
@@ -80,8 +84,8 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
                     
                     <div className={styles["name-inputs"]}>
                         <div>
-<label htmlFor="first-name">First Name:</label>
-<input type="text" name="firstName" id="firstName" placeholder="Enter your first name here" onChange={handleChange} required/>
+                            <label htmlFor="first-name">First Name:</label>
+                            <input type="text" name="firstName" id="firstName" placeholder="Enter your first name here" onChange={handleChange} required/>
                         </div>
                         <div>
                             <label htmlFor="last-name">Last Name:</label>
@@ -98,8 +102,8 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
                     <label htmlFor="password">Password:</label>
                     <input type="password" name="password" id="password" placeholder="Enter your password here" onChange={handleChange} required/>
 
-                    <label htmlFor="confirm-pass">Confirm Password:</label>
-                    <input type="password" name="confirm-pass" id="confirmPassword" placeholder="Confirm your password here" onChange={handleChange} required/>
+                    <label htmlFor="confirmPassword">Confirm Password:</label>
+                    <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm your password here" onChange={handleChange} required/>
 
                     <label htmlFor="age">Age:</label>
                     <input type="number" name="age" id="age" placeholder="Enter your age here" onChange={handleChange} min={1} max={120} />
@@ -116,19 +120,19 @@ export const CreateProfileModal: React.FC<CreateProfileModalProps> = ({onClose, 
                     <label htmlFor="weight">Weight:</label>
                     <input type="number" name="weight" id="weight" onChange={handleChange} placeholder="Enter your weight here" min={1} />
 
-                    <label htmlFor="fitness-level" >Fitness Level:</label>
-                    <select name="fitness-level" id="fitnessLevel" onChange={handleChange} >
+                    <label htmlFor="fitnessLevel" >Fitness Level:</label>
+                    <select name="fitnessLevel" id="fitnessLevel" onChange={handleChange} >
                         <option value="">Select</option>
                         <option value="beginner">Beginner</option>
                         <option value="intermediate">Intermediate</option>
                         <option value="expert">Expert</option>
                     </select>
 
-                    <label htmlFor="fitness-goals">Fitness Goals</label>
-                    <textarea name="fitness-goals" id="fitnessGoals" placeholder="Describe your fitness goals (e.g., lose weight, gain muscle, improve endurance)" rows={4} onChange={handleChange}></textarea>
+                    <label htmlFor="fitnessGoals">Fitness Goals</label>
+                    <textarea name="fitnessGoals" id="fitnessGoals" placeholder="Describe your fitness goals (e.g., lose weight, gain muscle, improve endurance)" rows={4} onChange={handleChange}></textarea>
                     
-                    <label htmlFor="exercise-preferences">Exercise Preferences:</label>
-                    <select name="exercise-preferences" id="exercisePreferences" onChange={handleChange} >
+                    <label htmlFor="exercisePreferences">Exercise Preferences:</label>
+                    <select name="exercisePreferences" id="exercisePreferences" onChange={handleChange} >
                         <option value="">Select</option>
                         <option value="cardio">Cardio</option>
                         <option value="strength">Strength</option>

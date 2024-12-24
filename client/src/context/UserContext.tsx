@@ -2,7 +2,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 
 // Define el tipo para el contexto
 interface UserContextType {
-    currentUser: { username: string } | null;
+  currentUser: { username: string } | null;
   setCurrentUser: (user: { username: string } | null) => void;
 }
 

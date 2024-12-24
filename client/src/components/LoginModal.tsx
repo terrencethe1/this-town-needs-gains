@@ -1,19 +1,23 @@
 import React from 'react';
 import styles from './LoginModal.module.css';
 import { useUser } from '../context/UserContext';
-
+import AuthService from '../utils/auth';
 
 interface LoginModalProps {
     onClose: () => void;
     onLoginSuccess: (username: string) => void;
 }
 
-export const LoginModal: React.FC<LoginModalProps> = ({onClose, onLoginSuccess}) => {
+export const LoginModal: React.FC<LoginModalProps> = ({onClose}) => {
     // Login code here
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [error, setError] = React.useState('');
     const { setCurrentUser } = useUser();
+
+    if (AuthService.loggedIn()) {
+        onClose;
+    }
     
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,11 +45,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({onClose, onLoginSuccess})
             if (response.ok) {
                 const data = await response.json();
                 setCurrentUser(data.user);
-                console.log('Data:', data);
+
 
                 localStorage.setItem('token', data.token);
               
-                onLoginSuccess(data.user?.username || '');
+
                 onClose();
             } else {
                 const errorData = await response.json();
@@ -58,29 +62,30 @@ export const LoginModal: React.FC<LoginModalProps> = ({onClose, onLoginSuccess})
     };
 
 
-
-    return (
-        <div className={styles['login-modal']}>
-            <div className={styles['login-modal-content']}>
-                
-                <form onSubmit={handleSubmit}>
+    if (!AuthService.loggedIn()) {
+        return (
+            <div className={styles['login-modal']}>
+                <div className={styles['login-modal-content']}>
                     
-                    <label htmlFor="username">Username:</label>
-                    <input type="text" name="username" id="username" placeholder="Enter your username here" onChange={handleChange} required/>
-
-                    <label htmlFor="password">Password:</label>
-                    <input type="password" name="password" id="password" placeholder="Enter your password here" onChange={handleChange} required/>
-
-                    {error && <p className={styles['error-message']}>{error}</p>}
-                    <div className={styles['form-btn']}>
-                        <button className={styles["submit-btn"]} type="submit">Submit</button>
-                        <button className={styles["close-btn"]} onClick={onClose}>Close</button>
-                    </div>
-
-                </form>
-
-                
+                    <form onSubmit={handleSubmit}>
+                        
+                        <label htmlFor="username">Username:</label>
+                        <input type="text" name="username" id="username" placeholder="Enter your username here" onChange={handleChange} required/>
+    
+                        <label htmlFor="password">Password:</label>
+                        <input type="password" name="password" id="password" placeholder="Enter your password here" onChange={handleChange} required/>
+    
+                        {error && <p className={styles['error-message']}>{error}</p>}
+                        <div className={styles['form-btn']}>
+                            <button className={styles["submit-btn"]} type="submit">Submit</button>
+                            <button className={styles["close-btn"]} onClick={onClose}>Close</button>
+                        </div>
+    
+                    </form>
+    
+                    
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }

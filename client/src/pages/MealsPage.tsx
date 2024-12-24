@@ -22,12 +22,7 @@ export const MealsPage = () => {
         )
     }
 
-    // useEffect(() => {
-    //         console.log(searchMeals)
-    //         fetchMeals().then((data) => {
-    //             searchMeals(data)
-    //         })
-    //     }, [meals]) 
+
     const fetchMeals = async () => {
         // Use Spoonacular API to get recipes based on carbs, fats and proteins
 
@@ -40,13 +35,11 @@ export const MealsPage = () => {
             }
         }
         const getMeals = await fetch(url, options)
-    //  &maxCalories=${calories}&maxFats=${fats}&maxCarbs=${carbs}&maxProtein=${protein}
+
         const mealData = await getMeals.json()
         console.log('meals:', mealData)
         searchMeals(mealData.results)
-        // .then(response => {response.json()})
-        // .then(result => {console.log(result); return result})
-        // .catch(error => console.log('error', error));
+
     }
 
     const saveMeal = async (meal: Meal) => {
@@ -90,11 +83,7 @@ export const MealsPage = () => {
                                     })}
                                     <button onClick={() => {
                                         saveMeal(meal);
-                                        // return (
-                                        // <>
-                                        //     <h1>Exercise Saved!</h1>
-                                        // </>
-                                        // )
+
                                     }}>Save Recipe</button>
                                 </div>
                             </div>
@@ -108,44 +97,3 @@ export const MealsPage = () => {
         </>
     );
 }
-{/* <div className='shortcard'>
-    <h1>Nutrition Goals</h1>
-    <p>
-        Calories:
-    </p>
-    <p>
-        Protein:
-    </p>
-    <p>
-        Fats:
-    </p>
-    <p>
-        Carbs:
-    </p>
-</div> */}
-{/* <div>
-    <h1>My Meals</h1>
-</div> */}
-{/* <section className='cardrow'>
-    <div className='card'>
-        <h2>Breakfast</h2>
-        <div>
-            <p>Breakfasts</p>
-            
-        </div>
-    </div>
-    <div className='card'>
-        <h2>Lunch</h2>
-        <div>
-            <p>Lunches</p>
-           
-        </div>
-    </div>
-    <div className='card'>
-        <h2>Dinner</h2>
-        <div>
-            <p>Dinners</p>
-            
-        </div>
-    </div>
-</section> */}

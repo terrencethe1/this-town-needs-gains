@@ -1,10 +1,35 @@
 import { useState, useEffect } from "react"
 import Dropdown from "react-bootstrap/Dropdown"
 import { Exercise } from "../interfaces/ExerciseMeals"
-// const apiKey = import.meta.env.RAPID_NINJA_API_KEY
-// import { render } from "react-dom"
+import AuthService from '../utils/auth';
+import { retrieveUser } from '../api/userApi';
+
 
 export const ExercisePage = () => {
+    
+    const username = AuthService.getProfile().id;
+
+    async function getUserId() {
+        try {
+            const user = await retrieveUser(username);
+            console.log(user);
+            console.log(user.id);
+            return user.id;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const [userId, setUserId] = useState(0);
+
+    useEffect(() => {
+        getUserId().then((userId) => {
+            setUserId(userId);
+        })
+        console.log(userId);
+    }, []);
+  
+
     // TODO: Create functions to:
     // Fetch exercise data and put it into workout objects to be displayed below
     const [exerciseSearch, setExerciseSearch] = useState('')
@@ -12,21 +37,23 @@ export const ExercisePage = () => {
 
     const saveExercise = async (exercise: string) => {
         console.log(exercise, typeof exercise)
+        console.log(JSON.stringify({exercise}));
+        
         try {
             const response = await fetch('/api/exercises', {
                 method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
-                body: JSON.stringify({exerciseName: exercise}),
+                body: JSON.stringify({exercise, userId}),
         });
         
         if (!response.ok) {
             throw new Error(`invalid API response, check network tab! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
-        return data
+
+        return data;
          } catch (error: any) {
             console.error('There is an error saving exercise', error);
 
@@ -48,46 +75,13 @@ export const ExercisePage = () => {
                 throw new Error('invalid API response, check the network tab');
             }
             const result = await response.json();
-            console.log('Data:', result);
+
             return result
         } catch (error) {
             console.error(error);
         }
-        // const response = await fetch(
-        //     `https://api.api-ninjas.com/v1/exercises?muscle=${exerciseSearch}`,
-        //     {
-        //         headers: {
-        //             'X-Api-Key': `${import.meta.env.NINJA_API_KEY}`
-        //         }
-        //     }
-        // )
-        // Fetch and display data from exercise API when function is implemented
     }
-    // const renderExerciseData = async () => {
-    //     {
-    //         if (exerciseSearch === '') {
-    //             return (
-    //                 <>
-    //                     <h2>Search for exercises by muscle group!</h2>
-    //                 </>
-    //             );
-    //         } else {
-    //             return (exercises.map((exercise, index) => (
-    //                 <div className='card' key={index}>
-    //                     <div>
-    //                         <p>{exerciseSearch}</p>
-    //                         {/* This is where the exercise data will be displayed*/}
-    //                         <p>{exercise.name}</p>
-    //                         <p>{exercise.difficulty}</p>
-    //                         <p>{exercise.instructions}</p>
-    //                     </div>
-    //                 </div>
-    //             )
-    //             ))
-    //         }
-    //     }
 
-    // }
 
     useEffect(() => {
         console.log(exerciseSearch)
@@ -95,6 +89,7 @@ export const ExercisePage = () => {
             setExercises(data)
         })
     }, [exerciseSearch])
+    
     const searchDropdown = () => {
         // Basic dropdown menu structure from https://react-bootstrap.netlify.app/docs/components/dropdowns/
         return (
@@ -128,32 +123,7 @@ export const ExercisePage = () => {
     return (
         <>
             <div className='centered'>
-                {/* <div>
-                    <h1>My Exercises</h1>
-                </div> */}
-                {/* <section className='cardrow'>
-                    <div className='card'>
-                        <h2>Push</h2>
-                        <div>
-                            <p>Chest, shoulders, and triceps</p>
-                            
-                        </div>
-                    </div>
-                    <div className='card'>
-                        <h2>Pull</h2>
-                        <div>
-                            <p>Back and biceps</p>
-                            
-                        </div>
-                    </div>
-                    <div className='card'>
-                        <h2>Legs</h2>
-                        <div>
-                            <p>Quads, hammies and glutes</p>
-                            
-                        </div>
-                    </div>
-                </section> */}
+
                 <div>
                     <h1>Search exercises by muscle group</h1>
                     {searchDropdown()}
@@ -170,6 +140,7 @@ export const ExercisePage = () => {
                                         <p>{exercise.instructions}</p>
                                         <button onClick={() => {
                                             saveExercise(exercise.name);
+                                            console.log(exercise.name);
                                             return (
                                             <>
                                                 <h1>Exercise Saved!</h1>

@@ -12,11 +12,7 @@ interface SavedExercise {
     id: number;
 }
 
-// interface nutrient {
-//     amount: number;
-//     name: string;
-//     unit: string
-// }
+
 
 interface Meal {
     id: number;

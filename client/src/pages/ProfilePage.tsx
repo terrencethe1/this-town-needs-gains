@@ -1,9 +1,34 @@
 
 import React, { useState, useEffect } from "react";
 import { SavedExercise } from "../interfaces/ExerciseMeals";
-// import { useUser } from "../context/UserContext";
+import AuthService from '../utils/auth';
+import { retrieveUser } from '../api/userApi';
+import { UserData } from '../interfaces/UserData';
 
 export const ProfilePage: React.FC = () => {
+
+
+
+    const userId = AuthService.getProfile().id;
+
+
+    const [user, setUser] = useState<UserData>();
+
+    const fetchUser = async () => {
+      try {
+        const data = await retrieveUser(userId);
+        setUser(data);
+
+      } catch (err) {
+        console.error('Failed to retrieve user', err);
+      }
+    };
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
+
+
 
     const [exerciseArr, setExerciseArr] = useState<SavedExercise[]>([])
     // TODO: Create function to get exercises from db and display them on page
@@ -11,7 +36,10 @@ export const ProfilePage: React.FC = () => {
         try {
             const response = await fetch('/api/exercises', 
                 {
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'userId': `${userId}`
+                    }
                 }
             )
             if (!response.ok) {
@@ -27,102 +55,26 @@ export const ProfilePage: React.FC = () => {
     useEffect(() => {
         getExercises()
     }, [])
-// import { useUser } from "../context/UserContext";
-// import  React, { useState, useEffect } from 'react';
-  /*
-interface UserData {
-    username: string;
-    fitnessLevel: string | null;
-    weight: number | null;
-  }
 
-// export const ProfilePage: React.FC = () => {
-
-    const { currentUser }: { currentUser: { username: string } | null } = useUser();
-    const [userData, setUserData] = useState<UserData | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token && currentUser) {
-            const fetchUserData = async () => {
-                try {
-                    const response = await fetch(`/api/user/${currentUser.username}`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        },
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        setUserData(data);
-                    } else {                        
-                        setError("An error occurred while fetching user data");
-                    }
-                } catch (error) {
-                    setError("An error occurred while fetching user data");
-                    console.error('An error occurred:', error);
-
-                } finally {
-                    setLoading(false);
-                }
-            };
-            fetchUserData();
-        } else {
-            setError("No token found");
-            setLoading(false);
-        }
-    }, [currentUser]);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
-    */
  
     return (
         <>
             <div className='centered'>
                 <div>
-                    <h1>{/*userData?.username*/} Profile</h1>
+                    <h1>User Profile: { user?.firstName } { user?.lastName }</h1>
                 </div>
                 <section className='cardrow'>
                     <div className='card'>
                         <h2>My info</h2>
                         <div>
-                            <p>Fitness Level: {/*userData?.fitnessLevel*/} </p>
-                            <p>Weight: {/*userData?.weight*/}</p>
-                            <p>Goals: {}</p>
+                            <p>Username: {user?.username}</p>
+                            <p>Fitness Level: {user?.fitnessLevel}</p>
+                            <p>Weight: {user?.weight}</p>
+                            <p>Training Style: {user?.exercisePreferences}</p>
+                            <p>Age: {user?.age}</p>
+                            <p>Gender: {user?.gender}</p>
                         </div>
                         {/* This is where the exercise data will be displayed*/}
-                    </div>
-                    <div className='card'>
-                        <h2>My exercise goals</h2>
-                        <div>
-                            <p>Personal Bests</p>
-                            <h3 className="pr">Squat:</h3>
-                            <h3 className="pr">Bench:</h3>
-                            <h3 className="pr">Deadlift:</h3>
-                            <p>Target Weight:</p>
-                        </div>
-                    </div>
-                    <div className='shortcard'>
-                        <h2>Nutrition Goals</h2>
-                        <p>
-                            Calories:
-                        </p>
-                        <p>
-                            Protein:
-                        </p>
-                        <p>
-                            Fats:
-                        </p>
-                        <p>
-                            Carbs:
-                        </p>
                     </div>
                 </section>
                 <div>
@@ -130,14 +82,17 @@ interface UserData {
                     <div className='centered'>
                         <section className='cardrow'>
                             <div className='card'>
-                                <div>
+                                <div key={userId}>
                                     {exerciseArr && exerciseArr.length > 0
                                     ? 
                                     exerciseArr.map((exercise) => (
-                                        <p>{exercise.exerciseName}</p>
+                                        <>
+                                        <p key={exercise.id}>{exercise.exerciseName}</p>
+                                        </>
                                     ))
                                     
                                     :
+                                    
                                     <p>No exercises yet!</p>
                                     }
                                     
@@ -159,31 +114,3 @@ interface UserData {
     );;
 }
 
-{/* <div className='card'>
-    <h2>Pull</h2>
-    <div>
-        <p>Back and biceps</p>
-       
-    </div>
-</div>
-<div className='card'>
-    <h2>Legs</h2>
-    <div>
-        <p>Quads, hammies and glutes</p>
-        
-    </div>
-</div> */}
-{/* <div className='card'>
-    <h2>Lunch</h2>
-    <div>
-        <p>Lunches</p>
-        
-    </div>
-</div>
-<div className='card'>
-    <h2>Dinner</h2>
-    <div>
-        <p>Dinners</p>
-       
-    </div>
-</div> */}

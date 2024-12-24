@@ -5,9 +5,15 @@ import { Exercise } from '../../models/exercises.js';
 const router = express.Router();
 
 // GET /exercise - Get all saved exercises
-router.get('/', async (_req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
+  const userId = req.headers.userid;
+  console.log(req.headers);
   try {
-    const exercises = await Exercise.findAll();
+    const exercises = await Exercise.findAll({
+      where: {
+        userId: parseInt(userId as string) 
+      }
+    });
     res.json(exercises);
   } catch (error: any) {
     res.status(500).json({
@@ -18,19 +24,25 @@ router.get('/', async (_req: Request, res: Response) => {
 
 // POST /exercises - Create a new exercise
 router.post('/', async (req: Request, res: Response) => {
-  
-  const { exerciseName } = req.body;
   try {
-    const newExercise = await Exercise.create({
-     exerciseName
-    });
-    res.status(201).json(newExercise);
-  } catch (error: any) {
-    res.status(400).json({
-      message: error.message
-    });
+
+    const exerciseName = req.body.exercise;
+    console.log(exerciseName, typeof exerciseName);
+    const userId = req.body.userId;
+    console.log(userId);
+
+    const newExercise = await Exercise.create({ exerciseName: exerciseName, userId: userId});
+
+    res.status(200).json(newExercise);
+  } catch (err) {
+    res.status(400).json(err);
   }
+
+
+
 });
+
+
 
 // DELETE /exercises/:id - Delete an exercise by ID
 router.delete('/:id', async (req: Request, res: Response) => {
